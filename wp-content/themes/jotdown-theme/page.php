@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 
-<h1>This is Michael Joseph</h1>
+<h1>Page</h1>
 <main>
   <?php if (have_posts()): while (have_posts()): the_post(); ?>
 
@@ -10,7 +10,7 @@
   </article>
 
   <?php endwhile; else : ?>
-    <p>No post available.</p>
+    <p>No page available.</p>
   <?php endif; ?>
 </main>
 
