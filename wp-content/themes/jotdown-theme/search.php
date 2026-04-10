@@ -2,7 +2,11 @@
 
 <div class="content-area">
   <main>
-    <h1>This is Michael Joseph</h1>
+    <header class="search-header">
+      <h1 class="search-header">
+        Search Result for: <?php echo get_search_query(); ?>
+      </h1>
+    </header>
     <?php if (have_posts()): while (have_posts()): the_post(); ?>
 
     <article>
