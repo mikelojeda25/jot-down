@@ -1,0 +1,14 @@
+# WordPress core
+wp-admin/
+wp-includes/
+
+# uploads
+wp-content/uploads/
+
+# Local environment
+.env
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
