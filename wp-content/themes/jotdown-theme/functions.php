@@ -10,3 +10,15 @@ function jotdown_features(){
 }
 
 add_action('after_setup_theme','jotdown_features');
+
+function jotdown_widgets() {
+    register_sidebar(array(
+        'name'          => 'Main Sidebar',
+        'id'            => 'main-sidebar',
+        'before_widget' => '<div class="widget">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3 class="widget-title">',
+        'after_title'   => '</h3>',
+    ));
+}
+add_action('widgets_init', 'jotdown_widgets');
