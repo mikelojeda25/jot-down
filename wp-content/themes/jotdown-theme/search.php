@@ -9,10 +9,7 @@
     </header>
     <?php if (have_posts()): while (have_posts()): the_post(); ?>
 
-    <article>
-      <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-      <div> <?php echo wp_trim_words(get_the_content(), 20, '...'); ?></div>
-    </article>
+    <?php get_template_part('template-parts/content'); ?>
     <?php endwhile; else : ?>
       <p>No post available.</p>
     <?php endif; ?>
