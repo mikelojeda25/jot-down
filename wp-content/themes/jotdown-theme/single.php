@@ -1,21 +1,20 @@
 <?php get_header(); ?>
 
 <main>
-  <h1>Single</h1>
-  <?php if (have_posts()): while (have_posts()): the_post(); ?>
+  <?php if (have_posts()): while (have_posts()): the_post(); 
+    get_template_part( 'template-parts/content', 'single' );
+  ?>
 
-  <article>
-    <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-    <p class="meta">
-      Posted on <?php the_time('F j, Y'); ?>
-      by <?php the_author(); ?>
-    </p>
-    <div><?php the_content(); ?></div>
-  </article>
 
   <?php endwhile; else : ?>
     <p>No content available.</p>
   <?php endif; ?>
+
+  <?php the_post_navigation( array(
+      'prev_text' => '&larr; %title',
+      'next_text' => '%title &rarr;',
+  ) );
+  ?>
 </main>
 
 <?php get_footer(); ?>
