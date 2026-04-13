@@ -9,10 +9,12 @@
         <span class="dashicons dashicons-search"></span> Search
     </button>
 
-<select name="sort_logic" onchange="this.form.submit()">
-        <option value="date-DESC" <?php selected($_GET['sort_logic'], 'date-DESC'); ?>>Newest First</option>
-        <option value="date-ASC" <?php selected($_GET['sort_logic'], 'date-ASC'); ?>>Oldest First</option>
-        <option value="title-ASC" <?php selected($_GET['sort_logic'], 'title-ASC'); ?>>Title (A-Z)</option>
-        <option value="title-DESC" <?php selected($_GET['sort_logic'], 'title-DESC'); ?>>Title (Z-A)</option>
+    <?php $sort_logic = $_GET['sort_logic'] ?? ''; ?>
+
+    <select name="sort_logic" onchange="this.form.submit()">
+        <option value="date-DESC" <?php selected($sort_logic, 'date-DESC'); ?>>Newest First</option>
+        <option value="date-ASC" <?php selected($sort_logic, 'date-ASC'); ?>>Oldest First</option>
+        <option value="title-ASC" <?php selected($sort_logic, 'title-ASC'); ?>>Title (A-Z)</option>
+        <option value="title-DESC" <?php selected($sort_logic, 'title-DESC'); ?>>Title (Z-A)</option>
     </select>
 </form>
