@@ -108,3 +108,32 @@ function jotdown_restrict_admin_access() {
         exit;
     }
 }
+
+// FAIL LOGIN
+add_action('wp_login_failed', 'jotdown_login_fail');
+
+function jotdown_login_fail($username) {
+    $referrer = $_SERVER['HTTP_REFERER']; // Saan nanggaling ang request?
+    
+    // Kung nanggaling sa custom login page natin, ibalik doon na may error flag
+    if ( !empty($referrer) && !strstr($referrer, 'wp-login') && !strstr($referrer, 'wp-admin') ) {
+        wp_redirect( preg_replace('/\?.*/', '', $referrer) . '?login=failed' );
+        exit;
+    }
+}
+
+add_filter( 'authenticate', 'jotdown_check_empty_login', 1, 3);
+
+function jotdown_check_empty_login( $user, $username, $password ) {
+    // Check kung nanggaling sa login attempt (POST)
+    if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
+        if ( empty($username) || empty($password) ) {
+            $referrer = $_SERVER['HTTP_REFERER'];
+            
+            // I-redirect pabalik na may error code na 'blank'
+            wp_redirect( preg_replace('/\?.*/', '', $referrer) . '?login=blank' );
+            exit;
+        }
+    }
+    return $user;
+}
