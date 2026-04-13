@@ -46,25 +46,41 @@ function jotdown_search_filter($query) {
 add_action('pre_get_posts', 'jotdown_search_filter');
 
 // REGISTRATION / SIGNUP
-function jotdown_handle_registration() {
-    if ( isset($_POST['jotdown_register_nonce']) && wp_verify_nonce($_POST['jotdown_register_nonce'], 'jotdown_register_action') ) {
-        $username = sanitize_user($_POST['username']);
-        $email    = sanitize_email($_POST['email']);
-        $password = $_POST['password'];
+add_action('init', 'profile_registration');
 
-        $user_id = wp_create_user( $username, $password, $email );
+function profile_registration() {
+    if ( isset($_POST['action']) && $_POST['action'] === 'jotdown_register' ) {
+        
+        if ( !isset($_POST['jotdown_register_nonce']) || !wp_verify_nonce($_POST['jotdown_register_nonce'], 'jotdown_register_action') ) {
+            wp_die('Security check failed.');
+        }
+
+        $userdata = array(
+            'user_login' => sanitize_user($_POST['username']),
+            'user_email' => sanitize_email($_POST['email']),
+            'user_pass'  => $_POST['password'], // WP will hash this automatically
+            'first_name' => sanitize_text_field($_POST['first_name']),
+            'last_name'  => sanitize_text_field($_POST['last_name']),
+            'role'       => 'subscriber' // Default role
+        );
+
+        $user_id = wp_insert_user( $userdata );
 
         if ( is_wp_error($user_id) ) {
             wp_redirect( home_url('/register?error=' . $user_id->get_error_code()) );
+            exit;
         } else {
-            // Automatic login pagkatapos mag-register
-            wp_set_auth_cookie( $user_id );
+            wp_set_current_user($user_id);
+            wp_set_auth_cookie($user_id);
             wp_redirect( home_url('/create-note') );
+            exit;
         }
-        exit;
     }
 }
+// Para sa mga HINDI pa logged in (Guests)
 add_action('admin_post_nopriv_jotdown_register', 'jotdown_handle_registration');
+
+// Para sa mga logged in na (Technically optional for register, but good to have)
 add_action('admin_post_jotdown_register', 'jotdown_handle_registration');
 
 // LOGIN
