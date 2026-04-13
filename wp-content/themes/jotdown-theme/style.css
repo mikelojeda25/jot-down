@@ -92,3 +92,116 @@ nav a:hover {
   color: white;
   border-color: #0073aa;
 }
+
+/* 404 PAGE STYLES */
+.error-404-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.error-404-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 80px 20px;
+}
+
+.error-title {
+  font-size: 6rem;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1;
+}
+
+.error-subtitle {
+  font-size: 1.5rem;
+  color: #666;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+.error-text {
+  color: #888;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.search-form-wrapper {
+  max-width: 500px;
+  margin: 0 auto 40px;
+}
+
+/* Reusable Button Style */
+.btn-back-home {
+  display: inline-block;
+  font-weight: 600;
+  color: #0073aa;
+  text-decoration: none;
+  border: 2px solid #0073aa;
+  padding: 12px 30px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btn-back-home:hover {
+  background-color: #0073aa;
+  color: #fff;
+}
+
+/* SEARCH FORM */
+/* SEARCH FORM CONTAINER */
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* THE INPUT FIELD */
+.search-field {
+  background-color: #1a1a1a; /* Dark industrial background */
+  border: 1px solid #333;
+  color: #e0e0e0;
+  padding: 10px 15px;
+  border-radius: 4px;
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+.search-field:focus {
+  border-color: #0073aa; /* Focus highlight */
+  outline: none;
+}
+
+/* THE BUTTON */
+.search-submit {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.search-submit:hover {
+  background-color: #444;
+}
+
+/* SCREEN READER TEXT (Accessibility) */
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
