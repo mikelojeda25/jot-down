@@ -1,36 +1,43 @@
 <?php
 /* Template Name: JotDown Create Note */
-
-// Security Check: I-kick out ang hindi logged in
 if ( !is_user_logged_in() ) {
-    wp_safe_redirect( site_url('/login') );
+    wp_redirect( home_url('/login') );
     exit;
 }
+get_header(); 
 
-get_header(); ?>
+global $jotdown_save_error; // SALUHIN ANG GLOBAL VARIABLE
+?>
 
 <div class="container create-note-container">
-    <h1>Write to the Void</h1>
+    
+    <?php if ( isset($jotdown_save_error) ) : ?>
+        <div class="error-toast" style="background: #ff4d4d; color: white; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+            <?php 
+                if ($jotdown_save_error == 'too_long') echo 'Error: Too many words. Keep it sharp! (Max 10 chars for test)';
+                if ($jotdown_save_error == 'empty') echo 'Error: The void refuses empty thoughts.';
+            ?>
+        </div>
+    <?php endif; ?>
 
-    <form id="new-note-form" method="POST">
-        <?php wp_nonce_field( 'post_nonce', 'post_nonce_field' ); ?>
+    <h2>Jot Down a New Thought</h2>
+
+    <form action="" method="POST">
+        <input type="hidden" name="action" value="jotdown_save_note">
+        <?php wp_nonce_field( 'jotdown_note_nonce', 'jotdown_note_nonce_field' ); ?>
 
         <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" name="title" id="title" placeholder="Give it a name..." required>
+            <label>Title</label>
+            <input type="text" name="note_title" placeholder="Enter note title..." 
+                   value="<?php echo isset($_POST['note_title']) ? esc_attr($_POST['note_title']) : ''; ?>" required>
         </div>
 
         <div class="form-group">
-            <label for="content">The Note</label>
-            <textarea name="content" id="content" rows="10" placeholder="Type your thoughts..." required></textarea>
+            <label>Content</label>
+            <textarea name="note_content" rows="5" placeholder="Write your thoughts..." required><?php echo isset($_POST['note_content']) ? esc_textarea($_POST['note_content']) : ''; ?></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="category">Category</label>
-            <?php wp_dropdown_categories( array( 'hide_empty' => 0, 'name' => 'category', 'orderby' => 'name', 'selected' => 1 ) ); ?>
-        </div>
-
-        <button type="submit" name="submit_note">Save Note</button>
+        <button type="submit">Save Note</button>
     </form>
 </div>
 

@@ -1,7 +1,10 @@
 <?php
 function jotdown_files(){
-  wp_enqueue_style('jotdown_main_styles', get_stylesheet_uri());
+    wp_enqueue_style('jotdown_main_styles', get_stylesheet_uri());
+    wp_enqueue_script('jotdown-notifications', get_theme_file_uri('/js/script.js'), array(), '1.0', true);
 }
+
+add_action('wp_enqueue_scripts', 'jotdown_files');
 
 add_action('wp_enqueue_scripts', 'jotdown_files');
 
@@ -113,9 +116,8 @@ function jotdown_restrict_admin_access() {
 add_action('wp_login_failed', 'jotdown_login_fail');
 
 function jotdown_login_fail($username) {
-    $referrer = $_SERVER['HTTP_REFERER']; // Saan nanggaling ang request?
+    $referrer = $_SERVER['HTTP_REFERER']; 
     
-    // Kung nanggaling sa custom login page natin, ibalik doon na may error flag
     if ( !empty($referrer) && !strstr($referrer, 'wp-login') && !strstr($referrer, 'wp-admin') ) {
         wp_redirect( preg_replace('/\?.*/', '', $referrer) . '?login=failed' );
         exit;
@@ -125,7 +127,6 @@ function jotdown_login_fail($username) {
 add_filter( 'authenticate', 'jotdown_check_empty_login', 1, 3);
 
 function jotdown_check_empty_login( $user, $username, $password ) {
-    // Check kung nanggaling sa login attempt (POST)
     if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
         if ( empty($username) || empty($password) ) {
             $referrer = $_SERVER['HTTP_REFERER'];
@@ -136,4 +137,123 @@ function jotdown_check_empty_login( $user, $username, $password ) {
         }
     }
     return $user;
+}
+
+// ADD NOTE / SAVE NOTE
+add_action('init', 'jotdown_handle_save_note');
+
+function jotdown_handle_save_note() {
+    global $jotdown_save_error; // TAWAGIN ANG GLOBAL VARIABLE
+
+    if ( isset($_POST['action']) && $_POST['action'] === 'jotdown_save_note' ) {
+        
+        if ( !isset($_POST['jotdown_note_nonce_field']) || !wp_verify_nonce($_POST['jotdown_note_nonce_field'], 'jotdown_note_nonce') ) {
+            wp_die('Security check failed.');
+        }
+
+        if ( !is_user_logged_in() ) {
+            wp_die('You must be logged in to jot down notes.');
+        }
+
+        $title   = sanitize_text_field($_POST['note_title']);
+        $content = wp_kses_post($_POST['note_content']);
+        $user_id = get_current_user_id();
+
+        // VALIDATION
+        if ( empty(trim($title)) || empty(trim($content)) ) {
+            $jotdown_save_error = 'empty';
+            return; // Hinto ang function, wag mag-save
+        }
+
+        if ( strlen(wp_strip_all_tags($content)) > 10 ) { // Testing limit: 10
+            $jotdown_save_error = 'too_long';
+            return; // Hinto ang function, wag mag-save
+        }
+
+        $new_note = array(
+            'post_title'   => $title,
+            'post_content' => $content,
+            'post_status'  => 'publish',
+            'post_author'  => $user_id,
+            'post_type'    => 'post'
+        );
+
+        $post_id = wp_insert_post($new_note);
+
+        if ( $post_id ) {
+            wp_redirect( home_url('/notes?notif=saved') );
+            exit;
+        }
+    }
+}
+// EDIT A NOTE
+add_action('init', 'jotdown_handle_update_note');
+
+function jotdown_handle_update_note() {
+    global $jotdown_error; // 1. CALL THE GLOBAL VARIABLE
+
+    if ( isset($_POST['action']) && $_POST['action'] === 'jotdown_update_note' ) {
+        
+        if ( !isset($_POST['jotdown_edit_nonce_field']) || !wp_verify_nonce($_POST['jotdown_edit_nonce_field'], 'jotdown_edit_nonce') ) {
+            wp_die('Security check failed.');
+        }
+
+        $note_id = intval($_POST['note_id']);
+        $note = get_post($note_id);
+
+        if ( !$note || $note->post_author != get_current_user_id() ) {
+            wp_die('Naughty! You can only edit your own notes.');
+        }
+
+        $title   = sanitize_text_field($_POST['note_title']);
+        $content = wp_kses_post($_POST['note_content']);
+
+        if ( empty(trim($title)) || empty(trim($content)) ) {
+            $jotdown_error = 'empty'; // 2. SET ERROR,WITHOUT REDIRECT
+            return; // Hinto lang ang function para di mag-save, tapos tuloy ang load ng page
+        }
+
+        if ( strlen(wp_strip_all_tags($content)) > 10 ) {
+            $jotdown_error = 'too_long'; // 2. SET ERROR, WAG MAG REDIRECT
+            return; // Hinto lang ang function para di mag-save
+        }
+
+        $updated_note = array(
+            'ID'           => $note_id,
+            'post_title'   => sanitize_text_field($_POST['note_title']),
+            'post_content' => wp_kses_post($_POST['note_content']),
+            'post_type'    => 'post',      
+            'post_status'  => 'publish'    
+        );
+
+        $updated_id = wp_insert_post($updated_note);
+
+        if ( $updated_id ) {
+            // Pag SUCCESS, dito lang tayo mag re-redirect
+            wp_redirect( get_permalink($updated_id) . '?updated=1' );
+            exit;
+        }
+    }
+}
+// DELETE A NOTE
+add_action('init', 'jotdown_handle_delete_note');
+
+function jotdown_handle_delete_note() {
+    if ( isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['note_id']) ) {
+        
+        $note_id = intval($_GET['note_id']);
+        $note = get_post($note_id);
+
+        // Security check: Dapat owner ka at dapat existing yung note
+        if ( $note && $note->post_author == get_current_user_id() ) {
+            // wp_delete_post(ID, force_delete)
+            // true = permanent bura / false = move to trash
+            wp_delete_post($note_id, true); 
+            
+            wp_redirect( home_url('/notes?notif=deleted') );
+            exit;
+        } else {
+            wp_die('Error: You cannot delete what is not yours.');
+        }
+    }
 }

@@ -208,3 +208,34 @@ nav a:hover {
   width: 1px;
   word-wrap: normal !important;
 }
+
+/* TOAST NOTIFICATION */
+.toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #1a1a1a;
+  color: #00ff41; /* Matrix green or #ff4d4d for Emo vibe */
+  padding: 15px 25px;
+  border-left: 5px solid #00ff41;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  font-family: "Courier New", monospace;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-fade-out {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}

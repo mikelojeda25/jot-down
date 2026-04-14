@@ -18,7 +18,7 @@
         <?php 
             echo paginate_links(array(
                 'prev_text' => '&laquo; Prev',
-                'next_text' => 'Next &raquo;', // Dagdagan mo ng semicolon dito sa dulo ng raquo
+                'next_text' => 'Next &raquo;',
             ));
         ?>
     </div>
