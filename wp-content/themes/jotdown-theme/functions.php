@@ -6,8 +6,6 @@ function jotdown_files(){
 
 add_action('wp_enqueue_scripts', 'jotdown_files');
 
-add_action('wp_enqueue_scripts', 'jotdown_files');
-
 function jotdown_features(){
   register_nav_menu('headerMenuLocation', 'Header Menu Location');
 }
@@ -165,7 +163,7 @@ function jotdown_handle_save_note() {
             return; // Hinto ang function, wag mag-save
         }
 
-        if ( strlen(wp_strip_all_tags($content)) > 10 ) { // Testing limit: 10
+        if ( strlen(wp_strip_all_tags($content)) > 5000 ) { // Testing limit: 10
             $jotdown_save_error = 'too_long';
             return; // Hinto ang function, wag mag-save
         }
@@ -213,7 +211,7 @@ function jotdown_handle_update_note() {
             return; // Hinto lang ang function para di mag-save, tapos tuloy ang load ng page
         }
 
-        if ( strlen(wp_strip_all_tags($content)) > 10 ) {
+        if ( strlen(wp_strip_all_tags($content)) > 5000 ) {
             $jotdown_error = 'too_long'; // 2. SET ERROR, WAG MAG REDIRECT
             return; // Hinto lang ang function para di mag-save
         }
@@ -236,20 +234,22 @@ function jotdown_handle_update_note() {
     }
 }
 // DELETE A NOTE
-add_action('init', 'jotdown_handle_delete_note');
-
 function jotdown_handle_delete_note() {
     if ( isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['note_id']) ) {
         
         $note_id = intval($_GET['note_id']);
+        
+        // 1. KULANG NA SECURITY CHECK: I-verify ang Nonce
+        // Chine-check nito kung yung 'susi' sa URL ay match sa 'lock' ng server
+        if ( !isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'delete_note_' . $note_id) ) {
+            wp_die('Security check failed. Nice try, hacker!');
+        }
+
         $note = get_post($note_id);
 
-        // Security check: Dapat owner ka at dapat existing yung note
+        // 2. OWNERSHIP CHECK (Dito ka lang tama sa luma mong code)
         if ( $note && $note->post_author == get_current_user_id() ) {
-            // wp_delete_post(ID, force_delete)
-            // true = permanent bura / false = move to trash
             wp_delete_post($note_id, true); 
-            
             wp_redirect( home_url('/notes?notif=deleted') );
             exit;
         } else {

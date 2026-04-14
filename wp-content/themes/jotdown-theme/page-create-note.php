@@ -14,8 +14,8 @@ global $jotdown_save_error; // SALUHIN ANG GLOBAL VARIABLE
     <?php if ( isset($jotdown_save_error) ) : ?>
         <div class="error-toast" style="background: #ff4d4d; color: white; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
             <?php 
-                if ($jotdown_save_error == 'too_long') echo 'Error: Too many words. Keep it sharp! (Max 10 chars for test)';
-                if ($jotdown_save_error == 'empty') echo 'Error: The void refuses empty thoughts.';
+                if ($jotdown_save_error == 'too_long') echo esc_html__('Error: Too many words. Keep it sharp! (Max 5000 chars)', 'jotdown');
+                if ($jotdown_save_error == 'empty') echo esc_html__('Error: The void refuses empty thoughts.', 'jotdown');
             ?>
         </div>
     <?php endif; ?>

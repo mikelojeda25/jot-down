@@ -2,7 +2,7 @@
 /* Template Name: JotDown Edit Note */
 if ( !is_user_logged_in() ) { wp_redirect(home_url('/login')); exit; }
 
-$note_id = $_GET['id'] ?? '';
+$note_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $note = get_post($note_id);
 
 // SECURITY: Author can edit 
@@ -16,8 +16,8 @@ global $jotdown_error; // TAWAGIN ANG GLOBAL VARIABLE DITO
 
 if ( isset($jotdown_error) ) {
     echo '<div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px;">';
-    if ($jotdown_error == 'too_long') echo 'Too many words! Limit is 10 for testing.';
-    if ($jotdown_error == 'empty') echo 'Fill in the blanks.';
+    if ($jotdown_error == 'too_long') echo esc_html__('Too many words! Limit is 10 for testing.', 'jotdown');
+    if ($jotdown_error == 'empty') echo esc_html__('Fill in the blanks.', 'jotdown');
     echo '</div>';
 }
 ?>
