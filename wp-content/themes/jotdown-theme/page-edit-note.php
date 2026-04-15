@@ -15,16 +15,16 @@ get_header();
 global $jotdown_error; // TAWAGIN ANG GLOBAL VARIABLE DITO
 
 if ( isset($jotdown_error) ) {
-    echo '<div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px;">';
+    echo '<div class="status-message status-message--error" style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px;">';
     if ($jotdown_error == 'too_long') echo esc_html__('Too many words! Limit is 10 for testing.', 'jotdown');
     if ($jotdown_error == 'empty') echo esc_html__('Fill in the blanks.', 'jotdown');
     echo '</div>';
 }
 ?>
 
-<div class="container">
-    <h2>Edit Your Thought</h2>
-    <form action="<?php echo esc_url(add_query_arg('id', $note->ID)); ?>" method="POST">
+<div class="container note-form-page note-form-page--edit">
+    <h2 class="note-form-title">Edit Your Thought</h2>
+    <form class="note-form note-form--edit" action="<?php echo esc_url(add_query_arg('id', $note->ID)); ?>" method="POST">
         <input type="hidden" name="action" value="jotdown_update_note">
         <input type="hidden" name="note_id" value="<?php echo $note->ID; ?>">
         <?php wp_nonce_field( 'jotdown_edit_nonce', 'jotdown_edit_nonce_field' ); ?>
@@ -32,7 +32,7 @@ if ( isset($jotdown_error) ) {
         <input type="text" name="note_title" value="<?php echo isset($_POST['note_title']) ? esc_attr($_POST['note_title']) : esc_attr($note->post_title); ?>" required>
         <textarea name="note_content" required><?php echo isset($_POST['note_content']) ? esc_textarea($_POST['note_content']) : esc_textarea($note->post_content); ?></textarea>
 
-        <button type="submit">Update Note</button>
+        <button class="btn-primary" type="submit">Update Note</button>
     </form>
 </div>
 

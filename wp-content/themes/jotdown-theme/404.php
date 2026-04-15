@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
-<div class="content-area error-404-container">
-    <main class="error-404-content">
+<div class="content-area error-404-container page-layout">
+    <main class="error-404-content main-content">
         <h1 class="error-title">404</h1>
         <h2 class="error-subtitle">The page you are looking for could not be found.</h2>
         
@@ -10,7 +10,7 @@
             Please try searching for the content or return to the homepage.
         </p>
         
-        <div class="search-form-wrapper">
+        <div class="search-form-wrapper error-search-wrapper">
             <?php get_search_form(); ?>
         </div>
 

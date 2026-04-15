@@ -12,17 +12,17 @@ get_header();
 
 
 if ( isset($_GET['error']) ) {
-    echo '<div style="color:red; background:#000; padding:10px;">Error Code: ' . esc_html($_GET['error']) . '</div>';
+    echo '<div class="status-message status-message--error" style="color:red; background:#000; padding:10px;">Error Code: ' . esc_html($_GET['error']) . '</div>';
 }
 ?>
 
 
 
-<div class="container register-container">
-    <h1>Create Your Identity</h1>
+<div class="container register-container auth-page auth-page--register">
+    <h1 class="auth-page-title">Create Your Identity</h1>
     
     <?php if ( isset($_GET['error']) ) : ?>
-        <p class="error-msg" style="color: red;">
+        <p class="error-msg status-message status-message--error" style="color: red;">
             <?php 
                 if ($_GET['error'] == 'existing_user_login') echo "Username already taken.";
                 elseif ($_GET['error'] == 'existing_user_email') echo "Email already registered.";
@@ -31,7 +31,7 @@ if ( isset($_GET['error']) ) {
         </p>
     <?php endif; ?>
 
-   <form action="" method="POST">
+   <form action="" method="POST" class="auth-form register-form">
     <input type="hidden" name="action" value="jotdown_register">
     <?php wp_nonce_field( 'jotdown_register_action', 'jotdown_register_nonce' ); ?>
 
@@ -60,10 +60,10 @@ if ( isset($_GET['error']) ) {
       <input type="password" name="password" id="password" required>
     </div>
 
-    <button type="submit">Sign Up</button>
+    <button class="btn-primary" type="submit">Sign Up</button>
   </form>
     
-    <p>Already have an account? <a href="<?php echo site_url('/login'); ?>">Login here</a></p>
+    <p class="auth-switch-text">Already have an account? <a class="inline-action-link" href="<?php echo site_url('/login'); ?>">Login here</a></p>
 </div>
 
 <?php get_footer(); ?>

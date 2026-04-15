@@ -1,5 +1,5 @@
-<form role="search" method="get" class="search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-    <label>
+<form role="search" method="get" class="search-form site-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+    <label class="search-field-wrap">
         <span class="screen-reader-text">Search for:</span>
         <input type="search" class="search-field" 
                placeholder="Search notes..." 
@@ -11,7 +11,7 @@
 
     <?php $sort_logic = $_GET['sort_logic'] ?? ''; ?>
 
-    <select name="sort_logic" onchange="this.form.submit()">
+    <select class="search-sort-select" name="sort_logic" onchange="this.form.submit()">
         <option value="date-DESC" <?php selected($sort_logic, 'date-DESC'); ?>>Newest First</option>
         <option value="date-ASC" <?php selected($sort_logic, 'date-ASC'); ?>>Oldest First</option>
         <option value="title-ASC" <?php selected($sort_logic, 'title-ASC'); ?>>Title (A-Z)</option>

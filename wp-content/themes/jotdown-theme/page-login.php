@@ -3,8 +3,8 @@
 get_header(); 
 ?>
 
-<div class="container dark-industrial-theme">
-    <h1>Enter the Void</h1>
+<div class="container dark-industrial-theme auth-page auth-page--login">
+    <h1 class="auth-page-title">Enter the Void</h1>
     
     <?php 
     // 1. Handle Display of Errors
@@ -18,7 +18,7 @@ get_header();
         }
 
         if ( $error_msg ) {
-            echo '<p style="color: #ff4d4d; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 5px; border-left: 5px solid #ff4d4d;">' . $error_msg . '</p>';
+            echo '<p class="status-message status-message--error" style="color: #ff4d4d; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 5px; border-left: 5px solid #ff4d4d;">' . $error_msg . '</p>';
         }
     }
 
@@ -34,8 +34,8 @@ get_header();
         );
         wp_login_form( $args ); 
     } else {
-        echo '<p>You are already logged in.</p>';
-        echo '<a href="' . home_url('/create-note') . '">Go to Notes</a>';
+        echo '<p class="status-message status-message--success">You are already logged in.</p>';
+        echo '<a class="inline-action-link" href="' . home_url('/create-note') . '">Go to Notes</a>';
     }
     ?>
 </div>

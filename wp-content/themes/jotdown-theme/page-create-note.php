@@ -9,10 +9,10 @@ get_header();
 global $jotdown_save_error; // SALUHIN ANG GLOBAL VARIABLE
 ?>
 
-<div class="container create-note-container">
+<div class="container create-note-container note-form-page note-form-page--create">
     
     <?php if ( isset($jotdown_save_error) ) : ?>
-        <div class="error-toast" style="background: #ff4d4d; color: white; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+        <div class="error-toast status-message status-message--error" style="background: #ff4d4d; color: white; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
             <?php 
                 if ($jotdown_save_error == 'too_long') echo esc_html__('Error: Too many words. Keep it sharp! (Max 5000 chars)', 'jotdown');
                 if ($jotdown_save_error == 'empty') echo esc_html__('Error: The void refuses empty thoughts.', 'jotdown');
@@ -20,9 +20,9 @@ global $jotdown_save_error; // SALUHIN ANG GLOBAL VARIABLE
         </div>
     <?php endif; ?>
 
-    <h2>Jot Down a New Thought</h2>
+    <h2 class="note-form-title">Jot Down a New Thought</h2>
 
-    <form action="" method="POST">
+    <form action="" method="POST" class="note-form">
         <input type="hidden" name="action" value="jotdown_save_note">
         <?php wp_nonce_field( 'jotdown_note_nonce', 'jotdown_note_nonce_field' ); ?>
 
@@ -37,7 +37,7 @@ global $jotdown_save_error; // SALUHIN ANG GLOBAL VARIABLE
             <textarea name="note_content" rows="5" placeholder="Write your thoughts..." required><?php echo isset($_POST['note_content']) ? esc_textarea($_POST['note_content']) : ''; ?></textarea>
         </div>
 
-        <button type="submit">Save Note</button>
+        <button class="btn-primary" type="submit">Save Note</button>
     </form>
 </div>
 

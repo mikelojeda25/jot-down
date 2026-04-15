@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html class="jd-html">
 <head>
     <meta charset="UTF-8">
     <title>Jot down</title>
     <?php wp_head(); ?>
 </head>
-<body <?php body_class()?>>
+<body <?php body_class('jd-body'); ?>>
     <?php if ( isset($_GET['notif']) ) : ?>
     <div id="jotdown-toast" class="toast-notification">
         <?php 
@@ -33,21 +33,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-    <header>
-        <h1>Jot down</h1>
-        <nav>
+    <header class="site-header">
+        <h1 class="site-branding-title">Jot down</h1>
+        <nav class="site-navigation">
             <?php
                 wp_nav_menu(array(
                     'theme_location' => 'headerMenuLocation'
                 ));
             ?>
 
-            <ul class="auth-nav">
+            <ul class="auth-nav user-auth-nav">
             <?php if ( is_user_logged_in() ) : ?>
-                <li><a href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a></li>
+                <li class="user-auth-item"><a class="user-auth-link" href="<?php echo wp_logout_url( home_url() ); ?>">Logout</a></li>
             <?php else : ?>
-                <li><a href="<?php echo site_url('/login'); ?>">Login</a></li>
-                <li><a href="<?php echo site_url('/register'); ?>">Sign Up</a></li>
+                <li class="user-auth-item"><a class="user-auth-link" href="<?php echo site_url('/login'); ?>">Login</a></li>
+                <li class="user-auth-item"><a class="user-auth-link" href="<?php echo site_url('/register'); ?>">Sign Up</a></li>
             <?php endif; ?>
         </ul>
         </nav>

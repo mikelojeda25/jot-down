@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
-<div class="content-area">
-    <main class="site-main">
+<div class="content-area page-layout">
+    <main class="site-main main-content main-content--single">
         <?php if (have_posts()): while (have_posts()): the_post(); 
             get_template_part( 'template-parts/content', 'single' );
         ?>
@@ -18,14 +18,14 @@
             $secure_delete_url = wp_nonce_url($delete_url, 'delete_note_' . get_the_ID());
             ?>
 
-            <a href="<?php echo esc_url($secure_delete_url); ?>" onclick="return confirm('Are you sure?')">Delete</a>
+            <a class="delete-btn" href="<?php echo esc_url($secure_delete_url); ?>" onclick="return confirm('Are you sure?')">Delete</a>
         <?php endif; ?>
 
         <?php endwhile; else : ?>
-            <p>No content available.</p>
+            <p class="empty-state-message">No content available.</p>
         <?php endif; ?>
 
-        <div class="post-navigation-wrapper">
+        <div class="post-navigation-wrapper post-nav">
             <?php the_post_navigation( array(
                 'prev_text' => '&larr; %title',
                 'next_text' => '%title &rarr;',
